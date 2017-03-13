@@ -25,9 +25,9 @@ const alexa = new Alexa({
 })
 ```
 
-`storage` - used by StandardCard while generating the images urls
-`applicationId` - if present, it will block requests with different applicationId
-`shouldEndSession` - set the default behavior for response (default: false)
+- `storage` - used by StandardCard while generating the images urls
+- `applicationId` - if present, it will block requests with different applicationId
+- `shouldEndSession` - set the default behavior for response (default: false)
 
 ---
 
@@ -48,7 +48,7 @@ alexa.intent('Booking', (req, res) => {
 
 ---
 
-## Hooks
+## Pre / Post Request Hooks
 - .pre()
 - .post()
 
@@ -73,9 +73,9 @@ alexa.post((req, res) => {
 
 ---
 
-## Request Types
+## Intents
 - .launch()
-- .SessionEnded()
+- .sessionEnded()
 - .intent()
 
 #### .launch((req, res) => {})
@@ -87,7 +87,7 @@ alexa.launch((req, res) => {
 })
 ```
 
-#### .SessionEnded(req, res)
+#### .sessionEnded(req, res)
 The session is ended by Alexa. For example, when the user doesn't respond for some seconds.
 
 ```
@@ -96,12 +96,19 @@ alexa.SessionEnded((req, res) => {
 })
 ```
 
-#### .intent(name, (req, res) => {})
+#### .intent(name, (req, res, slots) => {})
 The user has a clear intent to perform an action.
 
 ```
-alexa.intent('Booking', (req, res) => {
-  console.log('This is the Booking Intent')
+alexa.intent('Booking', (req, res, slots) => {
+  // Accessing slots...
+  console.log('You are going to ' + slots.City)
+
+  // ...It's equivalent to
+  console.log('You are going to ' + req.slot('City'))
+
+  // Using default values to slots
+  console.log('You are going to ' + req.slot('City', '... Hmm, which city?'))
 })
 ```
 
