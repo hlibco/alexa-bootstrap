@@ -1,0 +1,72 @@
+{
+  "name": "alexa-bootstrap",
+  "description": "Alexa Bootstrap",
+  "version": "0.1.0",
+  "author": "Felipe Hlibco <felipe@cleanify.com>",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:hlibco/alexa-bootstrap.git"
+  },
+  "bugs": "https://github.com/hlibco/alexa-bootstrap.git/issues",
+  "engines": {
+    "npm": ">=6"
+  },
+  "main": "./src/index",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "lint": "standard --verbose src/**/*.js test/**/*.js | snazzy",
+    "test": "NODE_ENV=test DEBUG=test,alexa-bootstrap:* DEBUG_COLORS=true ava",
+    "cover": "nyc npm test",
+    "check": "nsp check"
+  },
+  "ava": {
+    "files": [
+      "tests/**/*.js",
+      "!tests/**/_*.js",
+      "tests/endpoints/*.js"
+    ],
+    "concurrency": 5,
+    "failFast": true,
+    "verbose": true,
+    "tap": false
+  },
+  "nyc": {
+    "lines": 20,
+    "statements": 5,
+    "functions": 5,
+    "branches": 5,
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "src/**/*.spec.js",
+      "src/**/_*.js"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "text-summary"
+    ],
+    "cache": true,
+    "all": true,
+    "check-coverage": true,
+    "report-dir": "./coverage"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it",
+      "expect"
+    ]
+  },
+  "dependencies": {
+    "ava": "0.17.0",
+    "debug": "2.6.2"
+  },
+  "devDependencies": {
+    "nyc": "10.0.0",
+    "snazzy": "5.0.0",
+    "standard": "8.6.0"
+  }
+}
