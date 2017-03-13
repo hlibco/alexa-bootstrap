@@ -1,19 +1,13 @@
 # alexa-bootstrap
 ---
 
-![build](https://github.com/hlibco/alexa-bootstrap/badges/master/build.svg)
-
-![coverage](https://github.com/hlibco/alexa-bootstrap/badges/master/coverage.svg?job=test)
-
 [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 ---
 
 ## Installation
 
-> yarn add alexa-bootstrap
-or
-> npm i alexa-bootstrap
+`yarn add alexa-bootstrap` or `npm i alexa-bootstrap`
 
 ---
 
@@ -31,9 +25,9 @@ const alexa = new Alexa({
 })
 ```
 
-*storage* - used by StandardCard while generating the images urls
-*applicationId* - if present, it will block requests with different applicationId
-*shouldEndSession* - set the default behavior for response (default: false)
+`storage` - used by StandardCard while generating the images urls
+`applicationId` - if present, it will block requests with different applicationId
+`shouldEndSession` - set the default behavior for response (default: false)
 
 ---
 
@@ -55,8 +49,8 @@ alexa.intent('Booking', (req, res) => {
 ---
 
 ## Hooks
-- .pre((req, res) => {})
-- .post((req, res) => {})
+- .pre()
+- .post()
 
 #### .pre((req, res) => {})
 It runs before every request.
@@ -80,9 +74,9 @@ alexa.post((req, res) => {
 ---
 
 ## Request Types
-- .launch((req, res) => {})
-- .SessionEnded((req, res) => {})
-- .intent(name, (req, res) => {})
+- .launch()
+- .SessionEnded()
+- .intent()
 
 #### .launch((req, res) => {})
 The user invokes the skill but doesn't map to any specific intent.
@@ -115,13 +109,13 @@ alexa.intent('Booking', (req, res) => {
 
 ## Response
 
-- .say(ssml, vars)
-- .reprompt(ssml, vars)
-- .card(title, body, imageUrls, vars)
+- .say()
+- .reprompt()
+- .card()
 - .linkAccount()
 - .abort()
 - .end()
-- .tag(code)
+- .tag()
 - .session()
 
 #### .say(ssml, vars)
