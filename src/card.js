@@ -9,8 +9,8 @@ class Card {
       this.data.title = title
       this.data.text = body
       this.data.image = {
-        smallImageUrl: images && images[0],
-        largeImageUrl: images && images[1]
+        smallImageUrl: images && images[0] || '',
+        largeImageUrl: images && images[1] || ''
       }
 
       if (this.data.image.smallImageUrl.substr(0, 8) !== 'https://') {

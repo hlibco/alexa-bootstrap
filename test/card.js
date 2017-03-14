@@ -30,6 +30,23 @@ test(`standard card`, t => {
   t.deepEqual(card.format(), expected)
 })
 
+test(`standard card (with options.storage)`, t => {
+  const bucket = 'https://s3.amazon.com/bucket/123/'
+  const card = new Card('title', 'body', ['img1', 'img2'], null, {storage: bucket})
+
+  const expected = {
+    type: Alexa.CardType.Standard,
+    title: 'title',
+    text: 'body',
+    image: {
+      smallImageUrl: bucket + 'img1',
+      largeImageUrl: bucket + 'img2'
+    }
+  }
+
+  t.deepEqual(card.format(), expected)
+})
+
 test(`link account`, t => {
   const card = new Card().linkAccount()
 

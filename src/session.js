@@ -15,8 +15,7 @@ class Session {
   }
 
   clear (key) {
-    if (typeof key === 'string' &&
-        typeof this.attributes[key] !== 'undefined') {
+    if (typeof key === 'string') {
       delete this.attributes[key]
     } else {
       this.attributes = {}

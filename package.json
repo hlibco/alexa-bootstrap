@@ -33,10 +33,10 @@
     "tap": false
   },
   "nyc": {
-    "lines": 10,
-    "statements": 5,
-    "functions": 5,
-    "branches": 5,
+    "lines": 30,
+    "statements": 30,
+    "functions": 30,
+    "branches": 30,
     "include": [
       "src/**/*.js"
     ],
