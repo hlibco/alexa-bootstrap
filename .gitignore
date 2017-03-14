@@ -48,3 +48,5 @@ dump.rdb
 
 .env
 workspace.xml
+
+.nyc_output

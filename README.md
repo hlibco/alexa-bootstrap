@@ -1,15 +1,6 @@
 # alexa-bootstrap
----
 
-[![Build Status](https://travis-ci.org/hlibco/alexa-bootstrap.svg?branch=master)](https://travis-ci.org/hlibco/alexa-bootstrap)
-
-[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
-
-[![npm](https://img.shields.io/npm/v/alexa-bootstrap.svg)]()
-
-[![node](https://img.shields.io/node/v/alexa-bootstra.svg)]()
-
-[![npm](https://img.shields.io/npm/l/alexa-bootstrap.svg)]()
+[![Build Status](https://travis-ci.org/hlibco/alexa-bootstrap.svg?branch=master)](https://travis-ci.org/hlibco/alexa-bootstrap) [![Coverage Status](https://coveralls.io/repos/github/hlibco/alexa-bootstrap/badge.svg)](https://coveralls.io/github/hlibco/alexa-bootstrap) [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![node](https://img.shields.io/node/v/alexa-bootstrap.svg)]() [![npm](https://img.shields.io/npm/v/alexa-bootstrap.svg)]() [![npm](https://img.shields.io/npm/l/alexa-bootstrap.svg)]()
 ---
 
 ## Installation
@@ -33,8 +24,8 @@ const alexa = new Alexa({
 ```
 
 - `storage` - used by StandardCard while generating the images urls
-- `applicationId` - if present, it will block requests with different applicationId
-- `shouldEndSession` - set the default behavior for response (default: false)
+- `applicationId` - it's the applicationId displayed on the Developer Console > Alexa. If present, it will block requests with different applicationId
+- `shouldEndSession` - define if the session should be ended after each response (default: false)
 
 ---
 
@@ -44,9 +35,79 @@ const alexa = new Alexa({
 alexa.intent('Booking', (req, res) => {
   const meta = {vehicle: 'car', city: {name: 'San Francisco'}}
 
-  res.say('Your {vehicle} is in {city.name}.', meta)
-  .reprompt('I cant hear you. Do you want me to rent your car?')
+  res.say('Your {vehicle} is in {city.name}. Do you confirm?', meta)
+  .reprompt('I cant hear you. Say yes or no.')
 })
+```
+
+---
+
+## Example using Express
+Your Express setup might be more robust than the one below. It's a good practice to split the code below into files such as: server, routes and skills/intents.
+
+```
+const Alexa = require('alexa-bootstrap')
+const Express = require('express')
+const BodyParser = require('body-parser')
+
+const port = process.env.PORT || 8080
+const alexa = new Alexa()
+const router = Express.Router()
+const express = Express()
+
+/**
+ * Setup webserver
+ */
+express.set('port', port)
+
+/**
+ * Setup middlewares
+ */
+express.use(BodyParser.urlencoded({ extended: true }))
+express.use(BodyParser.json())
+
+
+/**
+ * Setup Alexa Skill
+ */
+alexa.pre((req, res) => {
+  res.session().set('city', 'New York')
+})
+
+alexa.launch((req, res) => {
+  console.log('Launch Intent')
+})
+
+alexa.intent('Food', (req, res) => {
+  res.say('Do you want to order {food}?', {food: 'pizza'})
+})
+
+/**
+ * Endpoint used by Alexa (POST) - setup in the Amazon Developer Console
+ * Change it to a name that best suits your needs.
+ */
+router.post('/skill', (req, res) => {
+  alexa.request(req.body).then(response => {
+    res.json(response)
+  }, response => {
+    res.status(500).send('Server Error')
+  })
+})
+
+/**
+ * Setup the router middleware
+ */
+express.use('/', router)
+
+/**
+ * Start server
+ * Webhooks must be available via SSL with a certificate signed by a valid
+ * certificate authority. Use Ngrok or similar for development.
+ */
+express.listen(port, () => {
+  console.log(`Alexa app is running on port ${port}`)
+})
+
 ```
 
 ---
@@ -66,11 +127,12 @@ alexa.pre((req, res) => {
 
 
 #### .post((req, res) => {})
-It runs after every request.
+It runs after every request. Even if the request has been aborted using `res.abort()` (more about this later).
 
 ```
 alexa.post((req, res) => {
   console.log('Post request')
+  res.say('Hello, how can I help you?')
 })
 ```
 
@@ -149,7 +211,7 @@ alexa.intent('Food', (req, res) => {
 #### .card(title, body, imageUrls, vars)
 - `title`: string (required)
 - `body`: string (required)
-- `imageUrls`: string || array of strings (optional)
+- `imageUrls`: string or array of strings (optional)
 - `vars`: object (optional)
 ```
 alexa.intent('Job', (req, res) => {
@@ -179,7 +241,7 @@ alexa.intent('Account', (req, res) => {
 ```
 
 #### .abort()
-You can abort the request in the .pre() hook if it doesn't match your business rules. However, the .post() hook will be executed.
+You can abort the request in the .pre() hook if it doesn't match your business rules. However, the `.post()` hook will still be executed.
 ```
 alexa.pre((req, res) => {
   res.abort()
@@ -198,20 +260,18 @@ alexa.intent('Restaurant', (req, res) => {
 It applies a tag to the response that will be returned in the next request. It's useful to track the conversation.
 
 ```
-// Step 1
+// Request 1
 alexa.intent('Restaurant', (req, res) => {
   res.say('Do you want to confirm your reservation?').tag('confirm_reservation')
 })
 
-// Step 2
+// Request 2
 alexa.intent('AMAZON.YesIntent', (req, res) => {
   if (req.tag('confirm_reservation')) {
     res.say('Ok. Your reservation is confirmed.')  
   }
 })
 ```
-
----
 
 #### .session()
 Returns the session if there is any.
