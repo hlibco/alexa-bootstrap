@@ -1,12 +1,13 @@
 const Alexa = require('./alexa')
 
 class Card {
-  constructor (title, text, images, meta, options) {
+  constructor (title, body, images, meta, options) {
     this.data = {}
     if (images) {
-      const uri = options.storage || ''
+      const uri = options && options.storage || ''
       this.type(Alexa.CardType.Standard)
-      this.data.text = text
+      this.data.title = title
+      this.data.text = body
       this.data.image = {
         smallImageUrl: images && images[0],
         largeImageUrl: images && images[1]
@@ -21,8 +22,13 @@ class Card {
     } else if (title) {
       this.type(Alexa.CardType.Simple)
       this.data.title = title
-      this.data.content = this.text
+      this.data.content = body
     }
+  }
+
+  linkAccount () {
+    this.type(Alexa.CardType.LinkAccount)
+    return this.format()
   }
 
   type (t) {

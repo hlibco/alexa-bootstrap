@@ -29,9 +29,9 @@ class Response {
   }
 
   // Assign a tag to the response
-  tag (val) {
-    if (val) {
-      this.session().set('__tag', val)
+  tag (name) {
+    if (name) {
+      this.session().set('__tag', name)
     }
     return this
   }
@@ -73,8 +73,7 @@ class Response {
   }
 
   linkAccount () {
-    const card = new Card().type(Alexa.CardType.LinkAccount)
-    this.response.card = card.format()
+    this.response.card = new Card().linkAccount()
     return this
   }
 

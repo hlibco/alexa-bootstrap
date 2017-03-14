@@ -36,7 +36,7 @@ class Session {
   Access default attributes
   */
   id () {
-    this.session.sessionId
+    return this.session.sessionId
   }
   isNew () {
     return this.session.new

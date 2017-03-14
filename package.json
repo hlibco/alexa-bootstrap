@@ -1,6 +1,6 @@
 {
   "name": "alexa-bootstrap",
-  "description": "Alexa Bootstrap",
+  "description": "A framework to develop scalable and production ready Alexa Skills",
   "version": "0.1.0",
   "author": "Felipe Hlibco <felipe@cleanify.com>",
   "repository": {
@@ -8,23 +8,24 @@
     "url": "git@github.com:hlibco/alexa-bootstrap.git"
   },
   "bugs": "https://github.com/hlibco/alexa-bootstrap.git/issues",
+  "homepage": "https://github.com/hlibco/alexa-bootstrap#readme",
   "engines": {
-    "npm": ">=6"
+    "npm": ">=6",
+    "node": ">=6"
   },
   "main": "./src/index",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "lint": "standard --verbose src/**/*.js test/**/*.js | snazzy",
     "test": "NODE_ENV=test DEBUG=test,alexa-bootstrap:* DEBUG_COLORS=true ava",
-    "cover": "nyc npm test",
-    "check": "nsp check"
+    "check": "nsp check",
+    "coverage": "nyc npm test",
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
+  "pre-commit": "lint",
   "ava": {
     "files": [
-      "tests/**/*.js",
-      "!tests/**/_*.js",
-      "tests/endpoints/*.js"
+      "test/**/*.js"
     ],
     "concurrency": 5,
     "failFast": true,
@@ -32,7 +33,7 @@
     "tap": false
   },
   "nyc": {
-    "lines": 20,
+    "lines": 10,
     "statements": 5,
     "functions": 5,
     "branches": 5,
@@ -40,8 +41,7 @@
       "src/**/*.js"
     ],
     "exclude": [
-      "src/**/*.spec.js",
-      "src/**/_*.js"
+      "src/**/*.spec.js"
     ],
     "reporter": [
       "html",
@@ -62,11 +62,26 @@
   },
   "dependencies": {
     "ava": "0.17.0",
-    "debug": "2.6.2"
+    "coveralls": "^2.12.0",
+    "debug": "2.6.2",
+    "pre-commit": "^1.2.2"
   },
   "devDependencies": {
     "nyc": "10.0.0",
     "snazzy": "5.0.0",
     "standard": "8.6.0"
-  }
+  },
+  "keywords": [
+    "alexa",
+    "alexa",
+    "skill",
+    "alexa",
+    "skills",
+    "skills",
+    "amazon",
+    "echo",
+    "amazon",
+    "alexa",
+    "amazon"
+  ]
 }

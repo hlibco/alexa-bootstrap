@@ -1,8 +1,15 @@
 # alexa-bootstrap
 ---
 
+[![Build Status](https://travis-ci.org/hlibco/alexa-bootstrap.svg?branch=master)](https://travis-ci.org/hlibco/alexa-bootstrap)
+
 [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
+[![npm](https://img.shields.io/npm/v/alexa-bootstrap.svg)]()
+
+[![node](https://img.shields.io/node/v/alexa-bootstra.svg)]()
+
+[![npm](https://img.shields.io/npm/l/alexa-bootstrap.svg)]()
 ---
 
 ## Installation
@@ -35,14 +42,10 @@ const alexa = new Alexa({
 
 ```
 alexa.intent('Booking', (req, res) => {
-  Debug('Run BookingIntent')
-
   const meta = {vehicle: 'car', city: {name: 'San Francisco'}}
 
   res.say('Your {vehicle} is in {city.name}.', meta)
-  .card('Your status is {status}', 'some text...', ['url 1', 'url 2'], {status: 'Pending'})
-  .repeat('Do you want me to rent a car in {city}', {city: 'Palo Alto'})
-  .reprompt('I cant hear you. What do you want?')
+  .reprompt('I cant hear you. Do you want me to rent your car?')
 })
 ```
 
@@ -234,6 +237,83 @@ alexa.intent('Flight', (req, res) => {
 
   // Clear entire session
   session.clear()
+})
+```
+
+---
+
+## Request
+
+- .raw()
+- .id()
+- .type()
+- .timestamp()
+- .locale()
+- .context()
+- .userId()
+- .accessToken()
+- .applicationId()
+- .intent()
+- .slot()
+- .reason()
+- .error()
+- .tag()
+
+#### .raw()
+Returns the raw request.
+
+#### .id()
+Returns the request id.
+
+#### .type()
+Returns the request type.
+
+#### .timestamp()
+Returns the timestamp.
+
+#### .locale()
+Returns the locale.
+
+#### .context()
+Returns the context object. Some requests do not have the *context* and will return and empty object.
+
+#### .userId()
+Returns the user id. It does the lookup in the `context` and `session` objects.
+
+#### .accessToken()
+Returns the user access token. It does the lookup in the `context` and `session` objects.
+
+#### .applicationId()
+Returns the application id. It does the lookup in the `context` and `session` objects.
+
+#### .intent()
+Returns the intent name.
+
+#### .slot(name, default)
+- `name`: optional
+- `default`: optional (default value)
+
+#### .reason()
+Returns the reason of the error occurred in SessionEndedRequest().
+
+#### .error()
+Returns the error occurred in SessionEndedRequest().
+
+#### .tag(name)
+- `name`: optional
+
+Returns the tag name or does an assert.
+
+```
+alexa.intent('Flight', (req, res) => {
+  // Get the tag name
+  req.tag()
+
+  // Assert the tag
+  if (req.tag('confirm_reservation')) {
+    // do something...
+  }
+
 })
 ```
 

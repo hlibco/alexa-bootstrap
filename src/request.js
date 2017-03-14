@@ -9,8 +9,12 @@ class Request {
 
   /*
   Get the tag from the previous response
+  or assert the tag name if specified
   */
-  tag () {
+  tag (name) {
+    if (name) {
+      return this.tag === name
+    }
     return this.tag
   }
 
