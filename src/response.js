@@ -14,7 +14,8 @@ class Response {
     card: {}
     */
     this.response = {
-      shouldEndSession: options.shouldEndSession
+      repeat: options.repeat || true,
+      shouldEndSession: options.shouldEndSession || false
     }
   }
 

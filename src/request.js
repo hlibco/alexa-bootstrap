@@ -72,7 +72,7 @@ class Request {
     try {
       return this.data.request.intent.name
     } catch (e) {
-      Debug('missing intent in request: ', e)
+      Debug('Missing intent in request:', e)
       return false
     }
   }
@@ -81,15 +81,13 @@ class Request {
   Slot value
   */
   slot (slotName, defaultValue) {
-    try {
-      if (this.data.request.intent.slots && slotName in this.data.request.intent.slots) {
-        return this.data.request.intent.slots[slotName].value
-      } else {
-        return defaultValue
-      }
-    } catch (e) {
-      Debug('missing intent in request: ' + slotName, e)
+    if (this.data.request.intent.slots && slotName in this.data.request.intent.slots) {
+      return this.data.request.intent.slots[slotName].value || defaultValue || null
+    } else if (defaultValue) {
       return defaultValue
+    } else {
+      Debug('Missing slot:', slotName)
+      return null
     }
   }
 

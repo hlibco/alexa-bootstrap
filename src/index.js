@@ -7,11 +7,7 @@ const Response = require('./response')
 
 class App {
   constructor (options) {
-    this.options = Object.assign({
-      repeat: true,
-      shouldEndSession: false
-    }, options)
-
+    this.options = options
     this.intents = {}
     this.constants = Alexa
     this.preFunction = null
