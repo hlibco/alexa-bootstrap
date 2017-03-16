@@ -141,18 +141,24 @@ test(`render(ssml, meta)`, t => {
   t.is(response.render('Hello {city.name}', {city: {name: 'London'}}), '<speak>Hello London</speak>')
 })
 
-test(`format()`, t => {
+test(`send()`, t => {
   const session = new Session(json.session)
   const response = new Response({}, session)
   const expected = {
     version: '1.0',
     response: {
-      repeat: true,
       shouldEndSession: false
     },
     sessionAttributes: {
       'city': 'San Francisco'
     }
   }
-  t.deepEqual(response.format(), expected)
+  t.deepEqual(response.send(), expected)
 })
+
+// test(`send()`, t => {
+//   const session = new Session(json.session)
+//   const response = new Response({}, session)
+//   response.say('Hello').send()
+//   t.is(response.send(), null)
+// })

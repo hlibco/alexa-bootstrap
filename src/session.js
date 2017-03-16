@@ -1,3 +1,5 @@
+'use strict'
+
 class Session {
   constructor (session) {
     this.session = session

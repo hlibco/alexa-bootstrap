@@ -1,3 +1,5 @@
+'use strict'
+
 const Alexa = require('./alexa')
 
 class Card {

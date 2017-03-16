@@ -1,8 +1,11 @@
+'use strict'
+
 const Alexa = require('./alexa')
 const Card = require('./card')
 
 class Response {
   constructor (options, session) {
+    this.tags = options.tags || {}
     this.aborted = false
     this.options = options || {}
     this._session = session
@@ -13,10 +16,8 @@ class Response {
     reprompt: {}
     card: {}
     */
-    this.response = {
-      repeat: this.options.repeat || true,
-      shouldEndSession: this.options.shouldEndSession || false
-    }
+    this.response = {}
+    this.clear()
   }
 
   session () {
@@ -26,6 +27,13 @@ class Response {
   // Abort any intent (it will not prevent post hook to be executed)
   abort () {
     this.aborted = true
+    return this
+  }
+
+  clear () {
+    this.response = {
+      shouldEndSession: this.options.shouldEndSession || false
+    }
     return this
   }
 
@@ -104,7 +112,10 @@ class Response {
     return `<speak>${txt}</speak>`
   }
 
-  format () {
+  send () {
+    // When called in the pre() hook, abort intent()
+    this.abort()
+
     return {
       version: '1.0',
       response: this.response,

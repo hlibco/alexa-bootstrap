@@ -1,14 +1,16 @@
+'use strict'
+
 const Debug = require('debug')('alexa-bootstrap:request')
 
 class Request {
   constructor (json, session) {
-    this.tag = session.get('__tag')
     this.data = json
-    this.session = session
+    this._tag = session.get('__tag')
+    this._session = session
   }
 
   session () {
-    return this.session
+    return this._session
   }
 
   /*
@@ -17,9 +19,9 @@ class Request {
   */
   tag (name) {
     if (name) {
-      return this.tag === name
+      return this._tag === name
     }
-    return this.tag
+    return this._tag
   }
 
   /*

@@ -1,3 +1,5 @@
+'use strict'
+
 const Debug = require('debug')('alexa-bootstrap:index')
 const Alexa = require('./alexa')
 
@@ -65,15 +67,14 @@ class App {
 
   request (json) {
     const self = this
-    const session = new Session(json.session)
-    const request = new Request(json, session)
-    const response = new Response(self.options, session)
+    const request = new Request(json, new Session(json.session))
+    const response = new Response(self.options, new Session(json.session))
 
-    Debug('requesting...', request.type())
+    Debug('Requesting...', request.type())
 
     return Promise.resolve().then(() => {
       if (self.preFunction) {
-        return Promise.resolve(self.preFunction(request, response))
+        return Promise.resolve(self.preFunction(request, response, request.type()))
       }
     }).then(() => {
       if (response.aborted) {
@@ -102,14 +103,15 @@ class App {
         default:
           return Promise.reject('INVALID_REQUEST_TYPE')
       }
-    // }).catch(e => {
-    //   Debug('Error on Pre or Intent', e)
-    }).then(() => {
+    }).catch(e => {
+      Debug('Error on Pre or Intent', e)
+      return e
+    }).then(e => {
       if (self.postFunction) {
-        return Promise.resolve(self.postFunction(request, response))
+        return Promise.resolve(self.postFunction(request, response, request.type(), e))
       }
     }).then(() => {
-      return response.format()
+      return response.send()
     }).catch(e => {
       Debug('Error on Post or formatting the response', e)
       throw Error(e)
