@@ -4,7 +4,7 @@ const Card = require('./card')
 class Response {
   constructor (options, session) {
     this.aborted = false
-    this.options = options
+    this.options = options || {}
     this._session = session
     /*
     shouldEndSession: bool
@@ -14,8 +14,8 @@ class Response {
     card: {}
     */
     this.response = {
-      repeat: options.repeat || true,
-      shouldEndSession: options.shouldEndSession || false
+      repeat: this.options.repeat || true,
+      shouldEndSession: this.options.shouldEndSession || false
     }
   }
 

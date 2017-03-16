@@ -7,6 +7,10 @@ class Request {
     this.session = session
   }
 
+  session () {
+    return this.session
+  }
+
   /*
   Get the tag from the previous response
   or assert the tag name if specified
