@@ -5,6 +5,7 @@ const Card = require('./card')
 
 class Response {
   constructor (options, session) {
+    this.msg = options.messages || {}
     this.tags = options.tags || {}
     this.aborted = false
     this.options = options || {}
@@ -51,6 +52,10 @@ class Response {
       type: Alexa.SpeechType.SSML,
       ssml: rendered
     }
+
+    // Clear repeat
+    this.session().clear('__repeat')
+
     // Set repeat data
     if (this.options.repeat) {
       this.repeat(null, null, rendered)
@@ -103,7 +108,11 @@ class Response {
       if (tag.indexOf('.') !== -1) {
         val = tag.split('.').reduce((o, i) => o[i], meta)
       } else {
-        val = meta[tag]
+        try {
+          val = meta[tag]
+        } catch (e) {
+          throw new Error(`Property ${tag} is not available in \r\n"${txt}"\r\n`)
+        }
       }
       txt = txt.replace(key, val)
     })

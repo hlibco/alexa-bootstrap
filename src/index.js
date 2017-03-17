@@ -11,6 +11,7 @@ class App {
   constructor (options) {
     this.options = options || {}
     this.intents = {}
+    this.exception = null
     this.constants = Alexa
     this.preFunction = null
     this.postFunction = null
@@ -105,10 +106,10 @@ class App {
       }
     }).catch(e => {
       Debug('Error on Pre or Intent', e)
-      return e
+      self.exception = e
     }).then(e => {
       if (self.postFunction) {
-        return Promise.resolve(self.postFunction(request, response, request.type(), e))
+        return Promise.resolve(self.postFunction(request, response, request.type(), self.exception))
       }
     }).then(() => {
       return response.send()

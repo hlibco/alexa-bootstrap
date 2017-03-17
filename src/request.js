@@ -6,6 +6,7 @@ class Request {
   constructor (json, session) {
     this.data = json
     this._tag = session.get('__tag')
+    this._repeat = session.get('__repeat')
     this._session = session
   }
 
@@ -22,6 +23,13 @@ class Request {
       return this._tag === name
     }
     return this._tag
+  }
+
+  /*
+  Get the repeat message from the previous response
+  */
+  repeat () {
+    return this._repeat || null
   }
 
   /*

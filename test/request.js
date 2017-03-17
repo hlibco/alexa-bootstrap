@@ -95,6 +95,15 @@ const json = {
   }
 }
 
+test(`repeat()`, t => {
+  const _json = JSON.parse(JSON.stringify(json))
+  const session = new Session(_json.session)
+  session.set('__repeat', 'here again')
+  const request = new Request(_json, session)
+
+  t.is(request.repeat(), 'here again')
+})
+
 test(`raw()`, t => {
   const session = new Session(json.session)
   const request = new Request(json, session)
