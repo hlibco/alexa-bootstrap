@@ -5,8 +5,9 @@ const Card = require('./card')
 
 class Response {
   constructor (options, session) {
-    this.msg = options.messages || {}
+    this.msg = options.messages.source || {}
     this.tags = options.tags || {}
+    this.globals = options.messages.globals || {}
     this.aborted = false
     this.options = options || {}
     this._session = session
@@ -103,13 +104,15 @@ class Response {
     let tag = ''
     let val = ''
     let matches = txt.match(/{(.+?)}/g) || []
+    const data = Object.assign({}, this.globals, meta || {})
+
     matches.map(key => {
       tag = key.substr(1, key.length - 2)
       if (tag.indexOf('.') !== -1) {
-        val = tag.split('.').reduce((o, i) => o[i], meta)
+        val = tag.split('.').reduce((o, i) => o[i], data)
       } else {
         try {
-          val = meta[tag]
+          val = data[tag]
         } catch (e) {
           throw new Error(`Property ${tag} is not available in \r\n"${txt}"\r\n`)
         }
