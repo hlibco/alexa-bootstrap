@@ -17,15 +17,33 @@ All settings are optional.
 const Alexa = require('alexa-bootstrap')
 
 const alexa = new Alexa({
+  tags: {
+    WELCOME: 'WELCOME'
+  },
+  repeat: true,
+  messages: {
+    source: {
+      WELCOME: 'Hi, how can I help you?'
+    },
+    globals: {
+      now: new Date()
+    },
+  },
   storage: 'https://s3....',
   applicationId: 'amzn1.echo-sdk-ams.app...',
   shouldEndSession: false
+
 })
 ```
-
-- `storage` - used by StandardCard while generating the images urls
-- `applicationId` - it's the applicationId displayed on the Developer Console > Alexa. If present, it will block requests with different applicationId
-- `shouldEndSession` - define if the session should be ended after each response (default: false)
+- `tags` - an object with tags one might want to apply to a request to make it easier to identify it in the subsequent request. Read more on **res.tag()** and **req.tag()**
+- `repeat` - saves the last response in the session (`__repeat`) for a use in the the next request by `req.repeat()`. Default: true
+- `reprompt` - save the last message in the session (`__reprompt`) and automatically used when the user does not respond after some seconds.
+- `messages` - object with speech settings.
+  - `source` - object used by `res.say(res.msg.*)` [e.g: res.say(res.msg.WELCOME)]
+  - `globals` - object used merged in the second parameter of `res.say(text, meta)`
+- `storage` - used by StandardCard while generating the images urls.
+- `applicationId` - it's the applicationId displayed on the Developer Console > Alexa. If present, it will block requests with different applicationId.
+- `shouldEndSession` - define if the session should be ended after each response (default: false).
 
 ---
 
@@ -317,6 +335,7 @@ alexa.intent('Flight', (req, res) => {
 - .slot()
 - .reason()
 - .error()
+- .session()
 - .tag()
 
 #### .raw()
@@ -351,13 +370,19 @@ Returns the intent name.
 
 #### .slot(name, default)
 - `name`: optional
-- `default`: optional (default value)
+- `default`: optional (same type as the slot)
 
 #### .reason()
 Returns the reason of the error occurred in SessionEndedRequest().
 
 #### .error()
 Returns the error occurred in SessionEndedRequest().
+
+#### .session()
+Returns the session in the request object.
+
+#### .repeat()
+Returns the repeat message set in the previous response (if any). Otherwise, null.
 
 #### .tag(name)
 - `name`: optional

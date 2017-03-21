@@ -1,25 +1,30 @@
 'use strict'
 
+const Debug = require('debug')('alexa-bootstrap:response')
 const Alexa = require('./alexa')
 const Card = require('./card')
 
 class Response {
   constructor (options, session) {
-    this.msg = options.messages.source || {}
+    this.msg = (options.messages && options.messages.source) || {}
     this.tags = options.tags || {}
-    this.globals = options.messages.globals || {}
+    this.globals = (options.messages && options.messages.globals) || {}
     this.aborted = false
-    this.options = options || {}
-    this._session = session
-    /*
-    shouldEndSession: bool
-    outputSpeech: {}
-    directives: []
-    reprompt: {}
-    card: {}
-    */
+    this.options = Object.assign({}, {
+      repeat: true,
+      reprompt: true,
+      shouldEndSession: false
+    }, options)
     this.response = {}
+    this._session = session
     this.clear()
+    /*
+    card: {}
+    reprompt: {}
+    directives: []
+    outputSpeech: {}
+    shouldEndSession: bool
+    */
   }
 
   session () {
@@ -34,7 +39,7 @@ class Response {
 
   clear () {
     this.response = {
-      shouldEndSession: this.options.shouldEndSession || false
+      shouldEndSession: this.options.shouldEndSession
     }
     return this
   }
@@ -61,6 +66,12 @@ class Response {
     if (this.options.repeat) {
       this.repeat(null, null, rendered)
     }
+
+    // Set reprompt
+    if (this.options.reprompt) {
+      this.reprompt(null, null, rendered)
+    }
+
     return this
   }
 
@@ -69,14 +80,25 @@ class Response {
     return this
   }
 
-  reprompt (ssml, meta) {
+  reprompt (ssml, meta, rendered) {
+    if (!ssml) {
+      try {
+        delete this.response.reprompt
+      } catch (e) {
+        Debug('Error removing reprompt', e)
+      }
+    }
     this.response.reprompt = {
       outputSpeech: {
         type: Alexa.SpeechType.SSML,
-        ssml: this.render(ssml, meta)
+        ssml: rendered || this.render(ssml, meta)
       }
     }
     return this
+  }
+
+  expect () {
+    this.session().set('__expect', arguments)
   }
 
   card () {
