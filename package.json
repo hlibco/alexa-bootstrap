@@ -1,7 +1,7 @@
 {
   "name": "alexa-bootstrap",
   "description": "A framework to develop scalable and production ready Alexa Skills",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Felipe Hlibco <felipe@cleanify.com>",
   "repository": {
     "type": "git",
