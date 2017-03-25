@@ -101,9 +101,22 @@ class Response {
     this.session().set('__expect', arguments)
   }
 
+  // title, body, images, meta, conf
   card () {
+    console.log('CARD >>>>>>>')
     const conf = {storage: this.options.storage}
-    const card = new Card(arguments[0], arguments[1], arguments[2], arguments[3], conf)
+
+    let title = arguments[0]
+    if (title && arguments[3]) {
+      title = this.render(title, arguments[3], false)
+    }
+
+    let body = arguments[1]
+    if (body && arguments[3]) {
+      body = this.render(body, arguments[3], false)
+    }
+
+    const card = new Card(title, body, arguments[2], conf)
     card.storage = this.options.storage
     this.response.card = card.format()
     return this
@@ -120,7 +133,7 @@ class Response {
     return this
   }
 
-  render (ssml, meta) {
+  render (ssml, meta, speak = true) {
     // remove any <speak> tags from the input string, if they exist. There can only be one set of <speak> tags.
     let txt = (ssml || '').replace(/<speak>/gi, ' ').replace(/<\/speak>/gi, ' ').trim()
     let tag = ''
@@ -143,7 +156,7 @@ class Response {
     })
 
     txt = txt.replace(/ +/, ' ')
-    return `<speak>${txt}</speak>`
+    return speak ? `<speak>${txt}</speak>` : txt
   }
 
   send () {

@@ -3,8 +3,9 @@
 const Alexa = require('./alexa')
 
 class Card {
-  constructor (title, body, images, meta, options) {
+  constructor (title, body, images, options) {
     this.data = {}
+
     if (images) {
       const uri = options && options.storage || ''
       this.type(Alexa.CardType.Standard)
