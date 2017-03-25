@@ -32,7 +32,7 @@ test(`standard card`, t => {
 
 test(`standard card (with options.storage)`, t => {
   const bucket = 'https://s3.amazon.com/bucket/123/'
-  const card = new Card('title', 'body', ['img1', 'img2'], null, {storage: bucket})
+  const card = new Card('title', 'body', ['img1', 'img2'], {storage: bucket})
 
   const expected = {
     type: Alexa.CardType.Standard,

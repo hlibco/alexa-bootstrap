@@ -103,7 +103,6 @@ class Response {
 
   // title, body, images, meta, conf
   card () {
-    console.log('CARD >>>>>>>')
     const conf = {storage: this.options.storage}
 
     let title = arguments[0]
