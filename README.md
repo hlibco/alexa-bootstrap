@@ -291,6 +291,9 @@ alexa.intent('AMAZON.YesIntent', (req, res) => {
 })
 ```
 
+#### .globals(data)
+It adds an object data to the global message scope.
+
 #### .session()
 Returns the session if there is any.
 

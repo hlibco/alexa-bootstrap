@@ -31,6 +31,10 @@ class Response {
     return this._session
   }
 
+  globals (data) {
+    this.globals = Object.assign({}, this.globals, data)
+  }
+
   // Abort any intent (it will not prevent post hook to be executed)
   abort () {
     this.aborted = true
