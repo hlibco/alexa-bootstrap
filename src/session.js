@@ -6,10 +6,10 @@ class Session {
     this.attributes = session.attributes || {}
   }
 
-  get (key) {
+  get (key, value) {
     // getAttributes deep clones the attributes object, so updates to objects
     // will not affect the session until `set` is called explicitly
-    return this.getAttributes()[key]
+    return this.getAttributes()[key] || value
   }
 
   set (key, value) {
