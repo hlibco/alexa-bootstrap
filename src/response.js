@@ -8,7 +8,6 @@ class Response {
   constructor (options, session) {
     this.msg = (options.messages && options.messages.source) || {}
     this.tags = options.tags || {}
-    this.globals = (options.messages && options.messages.globals) || {}
     this.aborted = false
     this.options = Object.assign({}, {
       repeat: true,
@@ -17,6 +16,7 @@ class Response {
     }, options)
     this.response = {}
     this._session = session
+    this._globals = (options.messages && options.messages.globals) || {}
     this.clear()
     /*
     card: {}
@@ -32,7 +32,7 @@ class Response {
   }
 
   globals (data) {
-    this.globals = Object.assign({}, this.globals, data)
+    this._globals = Object.assign({}, this._globals, data)
   }
 
   // Abort any intent (it will not prevent post hook to be executed)
@@ -142,7 +142,7 @@ class Response {
     let tag = ''
     let val = ''
     let matches = txt.match(/{(.+?)}/g) || []
-    const data = Object.assign({}, this.globals, meta || {})
+    const data = Object.assign({}, this._globals, meta || {})
 
     matches.map(key => {
       tag = key.substr(1, key.length - 2)
