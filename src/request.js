@@ -70,13 +70,13 @@ class Request {
   Identification
   */
   userId () {
-    return this.data.session.user.userId || this.context.System.user.userId
+    return this.data.session.user.userId || this.data.context.System.user.userId
   }
   accessToken () {
-    return this.data.session.user.accessToken || this.context.System.user.accessToken
+    return this.data.session.user.accessToken || this.data.context.System.user.accessToken
   }
   applicationId () {
-    return this.data.session.application.applicationId || this.context.System.application.applicationId
+    return this.data.session.application.applicationId || this.data.context.System.application.applicationId
   }
 
   /*
