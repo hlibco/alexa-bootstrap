@@ -84,7 +84,10 @@ class Request {
   */
   intent () {
     try {
-      return this.data.request.intent.name
+      if ('name' in this.data.request.intent) {
+        return this.data.request.intent.name
+      }
+      return false
     } catch (e) {
       Debug('Missing intent in request:', e)
       return false

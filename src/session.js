@@ -2,7 +2,7 @@
 
 class Session {
   constructor (session) {
-    this.session = session
+    this.session = session || {}
     this.attributes = session.attributes || {}
   }
 
