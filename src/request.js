@@ -84,7 +84,7 @@ class Request {
   */
   intent () {
     try {
-      if ('name' in this.data.request.intent) {
+      if (this.data.request.intent && 'name' in this.data.request.intent) {
         return this.data.request.intent.name
       }
       return false
